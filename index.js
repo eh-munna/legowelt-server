@@ -51,7 +51,7 @@ async function connectDB() {
     // get all toys
 
     app.get('/toys', async (req, res) => {
-      const toys = toysCollection.find();
+      const toys = toysCollection.find().limit(20);
       const result = await toys.toArray();
       res.send(result);
     });
