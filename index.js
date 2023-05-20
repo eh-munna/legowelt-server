@@ -18,7 +18,7 @@ app.use(express.json());
 
 // mongodb configuration
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.0lo6seg.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -48,8 +48,16 @@ async function connectDB() {
       res.send(result);
     });
 
+    // get a toy based on id
+    app.get('/toy/:id', async (req, res) => {
+      const toyId = req.params.id;
+      const query = { _id: new ObjectId(toyId) };
+      const result = await toysCollection.findOne(query);
+      res.send(result);
+    });
+
     // get a toy based on category
-    app.get('/toys/:text', async (req, res) => {
+    app.get('/loadToy/:text', async (req, res) => {
       const toyCategory = req.params.text;
       if (
         toyCategory === 'lego-cars' ||
@@ -60,9 +68,21 @@ async function connectDB() {
         const result = await toys.toArray();
         return res.send(result);
       }
+      const toys = toysCollection.find({});
+      const result = await toys.toArray();
+      res.send(result);
     });
-  } catch (err) {
-    console.log(err);
+
+    // app.get('/toys', async (req, res) => {
+    //   let query = {};
+    //   if (req.query?.subCategory) {
+    //     query = { subCategory: req.query.subCategory };
+    //   }
+    //   const result = await toysCollection.find(query).toArray();
+    //   res.send(result);
+    // });
+  } finally {
+    // client.close();
   }
 }
 
