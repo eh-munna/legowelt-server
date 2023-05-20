@@ -28,11 +28,19 @@ const client = new MongoClient(uri, {
     strict: true,
     deprecationErrors: true,
   },
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  maxPoolSize: 10,
 });
 
 async function connectDB() {
   try {
-    await client.connect();
+    client.connect((error) => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+    });
 
     // database name
     const legoWeltDB = client.db('legoWelt');
@@ -72,15 +80,6 @@ async function connectDB() {
       const result = await toys.toArray();
       res.send(result);
     });
-
-    // app.get('/toys', async (req, res) => {
-    //   let query = {};
-    //   if (req.query?.subCategory) {
-    //     query = { subCategory: req.query.subCategory };
-    //   }
-    //   const result = await toysCollection.find(query).toArray();
-    //   res.send(result);
-    // });
   } finally {
     // client.close();
   }
@@ -99,3 +98,5 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+// https://legowelt-server.vercel.app/
