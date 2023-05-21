@@ -116,6 +116,15 @@ async function connectDB() {
       const result = await toysCollection.updateOne(query, updateDoc);
       res.send(result);
     });
+
+    // delete a toy based on id
+
+    app.delete('/delete-toy/:id', async (req, res) => {
+      const toyId = req.params.id;
+      const query = { _id: new ObjectId(toyId) };
+      const result = await toysCollection.deleteOne(query);
+      res.send(result);
+    });
   } finally {
     // client.close();
   }
