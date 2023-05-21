@@ -76,8 +76,17 @@ async function connectDB() {
         const result = await toys.toArray();
         return res.send(result);
       }
-      const toys = toysCollection.find({});
-      const result = await toys.toArray();
+      // const toys = toysCollection.find({});
+      // const result = await toys.toArray();
+      // res.send(result);
+    });
+
+    // add a new toy
+
+    app.post('/add-toy', async (req, res) => {
+      const newToy = req.body;
+      console.log(newToy);
+      const result = await toysCollection.insertOne(newToy);
       res.send(result);
     });
   } finally {
