@@ -30,7 +30,7 @@ const client = new MongoClient(uri, {
   },
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  maxPoolSize: 10,
+  maxPoolSize: 100,
 });
 
 async function connectDB() {
@@ -48,10 +48,10 @@ async function connectDB() {
     // collection name
     const toysCollection = legoWeltDB.collection('toysCollection');
 
-    // indexing toys
-    const indexKeys = { toyName: 1 };
-    const indexOptions = { name: 'toyName' };
-    const result = await toysCollection.createIndex(indexKeys, indexOptions);
+    // // indexing toys
+    // const indexKeys = { toyName: 1 };
+    // const indexOptions = { name: 'toyName' };
+    // const result = await toysCollection.createIndex(indexKeys, indexOptions);
 
     // app.get('/toySearchByName/text', async (req, res) => {
     //   const text = req.params.text;
