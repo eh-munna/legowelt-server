@@ -99,6 +99,23 @@ async function connectDB() {
       const result = await toysCollection.insertOne(newToy);
       res.send(result);
     });
+
+    // update a toy based on id
+
+    app.patch('/update-toy/:id', async (req, res) => {
+      const toyId = req.params.id;
+      const update = req.body;
+      const query = { _id: new ObjectId(toyId) };
+      const updateDoc = {
+        $set: {
+          price: update.price,
+          description: update.description,
+          availableQuantity: update.availableQuantity,
+        },
+      };
+      const result = await toysCollection.updateOne(query, updateDoc);
+      res.send(result);
+    });
   } finally {
     // client.close();
   }
