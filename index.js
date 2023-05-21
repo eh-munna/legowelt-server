@@ -48,6 +48,31 @@ async function connectDB() {
     // collection name
     const toysCollection = legoWeltDB.collection('toysCollection');
 
+    // indexing toys
+    const indexKeys = { toyName: 1 };
+    const indexOptions = { name: 'toyName' };
+    const result = await toysCollection.createIndex(indexKeys, indexOptions);
+
+    // app.get('/toySearchByName/text', async (req, res) => {
+    //   const text = req.params.text;
+    //   const result = await toysCollection
+    //     .find({
+    //       $or: [{ toyName: { $regex: text, $options: 'i' } }],
+    //     })
+    //     .toArray();
+    //   res.send(result);
+    // });
+
+    // searching toys
+
+    app.get('/toySearchByName/:text', async (req, res) => {
+      const text = req.params.text;
+      const result = await toysCollection
+        .find({ toyName: { $regex: text, $options: 'i' } })
+        .toArray();
+      res.send(result);
+    });
+
     // get all toys
 
     app.get('/toys', async (req, res) => {
@@ -91,11 +116,16 @@ async function connectDB() {
       // res.send(result);
     });
 
+    // sorting toys base on price
+    app.get('/sortHighPrice', async (req, res) => {
+      const toys = await toysCollection.find({}).sort({ price: -1 }).toArray();
+      return res.send(toys);
+    });
+
     // add a new toy
 
     app.post('/add-toy', async (req, res) => {
       const newToy = req.body;
-      console.log(newToy);
       const result = await toysCollection.insertOne(newToy);
       res.send(result);
     });
