@@ -64,6 +64,16 @@ async function connectDB() {
       res.send(result);
     });
 
+    // get a toy base on email
+    app.get('/myToy/:email', async (req, res) => {
+      const result = await toysCollection
+        .find({
+          sellerEmail: req.params.email,
+        })
+        .toArray();
+      res.send(result);
+    });
+
     // get a toy based on category
     app.get('/loadToy/:text', async (req, res) => {
       const toyCategory = req.params.text;
