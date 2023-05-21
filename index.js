@@ -116,9 +116,25 @@ async function connectDB() {
       // res.send(result);
     });
 
-    // sorting toys base on price
-    app.get('/sortHighPrice', async (req, res) => {
-      const toys = await toysCollection.find({}).sort({ price: -1 }).toArray();
+    // sorting toys based high price
+    app.get('/sortHighPrice/:email', async (req, res) => {
+      const toys = await toysCollection
+        .find({
+          sellerEmail: req.params.email,
+        })
+        .sort({ price: -1 })
+        .toArray();
+      return res.send(toys);
+    });
+
+    // sorting toys based on low price
+    app.get('/sortLowPrice/:email', async (req, res) => {
+      const toys = await toysCollection
+        .find({
+          sellerEmail: req.params.email,
+        })
+        .sort({ price: 1 })
+        .toArray();
       return res.send(toys);
     });
 
