@@ -63,10 +63,10 @@ async function connectDB() {
     //   res.send(result);
     // });
 
-    // searching toys
-
+    // searching toys by name
     app.get('/toySearchByName/:text', async (req, res) => {
       const text = req.params.text;
+
       const result = await toysCollection
         .find({ toyName: { $regex: text, $options: 'i' } })
         .toArray();
